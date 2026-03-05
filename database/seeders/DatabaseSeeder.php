@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-       $users = User::factory()->count(10)->create();
+      $this->call(UserSeeder::class);
+       $users = User::all();
        $users -> each(function ($users){
         Recipe::factory()->create([
             'user_id' => $users->id

@@ -13,7 +13,7 @@ class RecipesController extends Controller
      */
     public function index()
     {
-        //
+        return Recipe::with('user')->get();
     }
 
     /**
@@ -21,7 +21,16 @@ class RecipesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Crear receta
+        $data = $request->validate([
+        'title' => 'required|string|max:35',
+        'description'=>'nullable|string|max:250',
+        'ingredients' => 'required|string|max:15',
+        'steps' => 'required|string|max:250',
+        ]);
+
+        $recipe = Recipe::create($data);
+        return response()->json(['id' => $recipe->id], 201);
     }
 
     /**
@@ -29,7 +38,8 @@ class RecipesController extends Controller
      */
     public function show(Recipe $recipe)
     {
-        //
+        return $recipe->load('user');
+
     }
 
     /**
@@ -37,14 +47,33 @@ class RecipesController extends Controller
      */
     public function update(Request $request, Recipe $recipe)
     {
-        //
+        if ($recipe->user_id !== Auth::id()){
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+
+        $data = $request -> validate([
+        'title' => 'sometimes|required|string|max:35',
+        'description'=>'nullable|string|max:250',
+        'ingredients' => 'sometimes|required|string|max:15',
+        'steps' => 'sometimes|required|string|max:250',
+        ]);
+
+       $recipe->update($data);
+       return $recipe;
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Recipe $recipe)
-    {
-        //
+    { 
+        if ($recipe->user_id !== Auth::id()){
+            return response()->json(['message' => 'No autorizado'], 403);
+        }
+        $recipe -> delete();
+        return response()->json(
+            ['message'=>'receta eliminada correctamente'],
+            200
+        );
     }
 }
