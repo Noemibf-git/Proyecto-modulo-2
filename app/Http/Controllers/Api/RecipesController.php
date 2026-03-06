@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class RecipesController extends Controller
 {
@@ -29,7 +31,7 @@ class RecipesController extends Controller
         'steps' => 'required|string|max:250',
         ]);
 
-        $recipe = Recipe::create($data);
+        $recipe = $request->user()->recipes()->create($data);
         return response()->json(['id' => $recipe->id], 201);
     }
 
@@ -47,7 +49,7 @@ class RecipesController extends Controller
      */
     public function update(Request $request, Recipe $recipe)
     {
-        if ($recipe->user_id !== Auth::id()){
+        if ($recipe->user_id !== Auth::id() && Auth::user()->role !== 'admin'){
             return response()->json(['message' => 'No autorizado'], 403);
         }
 
@@ -67,7 +69,7 @@ class RecipesController extends Controller
      */
     public function destroy(Recipe $recipe)
     { 
-        if ($recipe->user_id !== Auth::id()){
+        if ($recipe->user_id !== Auth::id() && Auth::user()->role !== 'admin'){
             return response()->json(['message' => 'No autorizado'], 403);
         }
         $recipe -> delete();
