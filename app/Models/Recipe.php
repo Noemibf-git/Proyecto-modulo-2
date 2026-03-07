@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use App\Models\User;
 use App\Models\Ingredient;
 use App\Models\RecipeStep;
+use App\Models\Comment;
 
 class Recipe extends Model
 {
@@ -34,6 +34,11 @@ class Recipe extends Model
     public function steps()
     {
         return $this->hasMany(RecipeStep::class)->orderBy('step_number');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RecipesController;
 use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\RecipeStepController;
+use App\Http\Controllers\Api\CommentController;
 
 // Rutas públicas
 Route::post('/login', [AuthController::class, 'login']);
@@ -15,6 +16,8 @@ Route::get('/recipes/{recipe}', [RecipesController::class, 'show']);
 Route::get('/recipes/{recipe}/steps', [RecipeStepController::class, 'index']);
 Route::get('/ingredients', [IngredientController::class, 'index']);
 Route::post('/ingredients/search', [IngredientController::class, 'search']);
+Route::get('/recipes/{recipe}/comments', [CommentController::class, 'index']);
+
 
 // Usuario auntenticado 
 Route::middleware('auth:sanctum')->group(function () {
@@ -23,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/recipes', [RecipesController::class, 'store']);
     Route::put('/recipes/{recipe}', [RecipesController::class, 'update']);
     Route::delete('/recipes/{recipe}', [RecipesController::class, 'destroy']);
+    Route::post('/recipes/{recipe}/comments', [CommentController::class, 'store']);
+    Route::delete('/recipes/{recipe}/comments/{comment}', [CommentController::class, 'destroy']);
 });
 
 // ── SOLO ADMIN ────────────────────────────────────────────
