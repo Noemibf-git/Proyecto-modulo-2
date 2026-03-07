@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\User;
+use App\Models\Ingredient;
+use App\Models\RecipeStep;
 
 class Recipe extends Model
 {
@@ -15,8 +17,7 @@ class Recipe extends Model
     protected $fillable = [
         'title',
         'description',
-        'ingredients',
-        'steps',
+        'imagen',
         'user_id'
     ];
 
@@ -24,7 +25,7 @@ class Recipe extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function ingredientes(){
+    public function ingredients(){
         return $this->belongsToMany(Ingredient::class, 'recipe_ingredients')
                     ->withPivot('quantity', 'unit')
                     ->withTimestamps();
