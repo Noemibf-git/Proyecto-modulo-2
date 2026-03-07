@@ -24,5 +24,15 @@ class Recipe extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function ingredientes(){
+        return $this->belongsToMany(Ingredient::class, 'recipe_ingredients')
+                    ->withPivot('quantity', 'unit')
+                    ->withTimestamps();
+    }
+
+    public function steps()
+    {
+        return $this->hasMany(RecipeStep::class)->orderBy('step_number');
+    }
 }
 
