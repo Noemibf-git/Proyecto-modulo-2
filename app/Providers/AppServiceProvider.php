@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        error_reporting(E_ALL & ~E_USER_WARNING & ~E_USER_NOTICE);
+
     }
 }

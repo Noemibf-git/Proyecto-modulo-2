@@ -1,0 +1,481 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Recetas",
+        "description": "API REST para gestión de recetas de cocina",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Iniciar sesión",
+                "operationId": "222b2625838e3c57e017987f73598fda",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login correcto"
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas"
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Registrar usuario",
+                "operationId": "8e4e3cb7b46126f4696379d3c7eeb4ad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "Maria"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "maria@ejemplo.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "contraseña123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "contraseña123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario registrado"
+                    }
+                }
+            }
+        },
+        "/api/recipes/{id}/comments": {
+            "get": {
+                "tags": [
+                    "Comentarios"
+                ],
+                "summary": "Ver comentarios de una receta",
+                "description": "Display a listing of the resource.",
+                "operationId": "87ee1018b9549432801c8f367e4d6611",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de comentarios"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Comentarios"
+                ],
+                "summary": "Crear un comentario",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "63813a6d71dd0409b39e84c79c2a93cf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Qué receta tan buena!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Comentario creado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/recipes/{recipe}/comments/{comment}": {
+            "delete": {
+                "tags": [
+                    "Comentarios"
+                ],
+                "summary": "Borrar un comentario",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "54621e20fbedcce16a7aabe16a2c71d1",
+                "parameters": [
+                    {
+                        "name": "recipe",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "comment",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comentario eliminado"
+                    },
+                    "403": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ingredients": {
+            "get": {
+                "tags": [
+                    "Ingredientes"
+                ],
+                "summary": "Listar todos los ingredientes",
+                "description": "Display a listing of the resource.",
+                "operationId": "ca30a55ef34259f063c742b684cc4bff",
+                "responses": {
+                    "200": {
+                        "description": "Lista de ingredientes"
+                    }
+                }
+            }
+        },
+        "/api/ingredients/{id}": {
+            "get": {
+                "tags": [
+                    "Ingredientes"
+                ],
+                "summary": "Ver un ingrediente y sus recetas",
+                "description": "Display the specified resource.",
+                "operationId": "31ceea6e0627b6ebd10d683e8ae3af69",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ingrediente encontrado"
+                    }
+                }
+            }
+        },
+        "/api/ingredients/search": {
+            "post": {
+                "tags": [
+                    "Ingredientes"
+                ],
+                "summary": "Buscar recetas por ingredientes",
+                "description": "Search the specified resource in storage.",
+                "operationId": "e46b4c1fe4c6d9178d2aa0ff8da1de6a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "ingredients": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "huevos",
+                                            "harina"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Recetas encontradas"
+                    }
+                }
+            }
+        },
+        "/api/recipes/{id}/steps": {
+            "get": {
+                "tags": [
+                    "Pasos"
+                ],
+                "summary": "Ver los pasos de una receta",
+                "description": "Display a listing of the resource.",
+                "operationId": "b54ad0daa46df43457f2ad2bd96f4d4d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de pasos"
+                    }
+                }
+            }
+        },
+        "/api/recipes": {
+            "get": {
+                "tags": [
+                    "Recetas"
+                ],
+                "summary": "Listar todas las recetas",
+                "description": "Display a listing of the resource.",
+                "operationId": "1e587d699985917a91006f5147dd6efd",
+                "responses": {
+                    "200": {
+                        "description": "Lista de recetas"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Recetas"
+                ],
+                "summary": "Crear una receta",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "52cccfcd6194dfcd08167eb059f9eb25",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Tortilla de patatas"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Receta clásica"
+                                    },
+                                    "imagen": {
+                                        "type": "string",
+                                        "example": "tortilla.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Receta creada"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/recipes/{id}": {
+            "get": {
+                "tags": [
+                    "Recetas"
+                ],
+                "summary": "Ver una receta",
+                "description": "Display the specified resource.",
+                "operationId": "522b99426906b041df4d3cab082c957b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Receta encontrada"
+                    },
+                    "404": {
+                        "description": "No encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Recetas"
+                ],
+                "summary": "Actualizar una receta",
+                "description": "Update the specified resource in storage.",
+                "operationId": "bf25556be81621df426506c756de5994",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Receta actualizada"
+                    },
+                    "403": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Recetas"
+                ],
+                "summary": "Borrar una receta",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "bf9ca7739b49377a16be4dfd90f277e9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Receta eliminada"
+                    },
+                    "403": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticación",
+            "description": "Autenticación"
+        },
+        {
+            "name": "Comentarios",
+            "description": "Comentarios"
+        },
+        {
+            "name": "Ingredientes",
+            "description": "Ingredientes"
+        },
+        {
+            "name": "Pasos",
+            "description": "Pasos"
+        },
+        {
+            "name": "Recetas",
+            "description": "Recetas"
+        }
+    ]
+}

@@ -7,13 +7,15 @@ use App\Models\Recipe;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use OpenApi\Attributes as OA;
 
 class RecipesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    #[OA\Get(path: '/api/recipes', summary: 'Listar todas las recetas', tags: ['Recetas'])]
+    #[OA\Response(response: 200, description: 'Lista de recetas')]
     public function index()
     {
         return Recipe::with('user', 'ingredients', 'steps')->get();
@@ -22,6 +24,14 @@ class RecipesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    #[OA\Post(path: '/api/recipes', summary: 'Crear una receta', tags: ['Recetas'], security: [['bearerAuth' => []]])]
+    #[OA\RequestBody(required: true, content: new OA\JsonContent(properties: [
+        new OA\Property(property: 'title', type: 'string', example: 'Tortilla de patatas'),
+        new OA\Property(property: 'description', type: 'string', example: 'Receta clásica'),
+        new OA\Property(property: 'imagen', type: 'string', example: 'tortilla.jpg'),
+    ]))]
+    #[OA\Response(response: 201, description: 'Receta creada')]
+    #[OA\Response(response: 401, description: 'No autenticado')]
     public function store(Request $request)
     {
         //Crear receta
@@ -62,6 +72,10 @@ class RecipesController extends Controller
     /**
      * Display the specified resource.
      */
+    #[OA\Get(path: '/api/recipes/{id}', summary: 'Ver una receta', tags: ['Recetas'])]
+    #[OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))]
+    #[OA\Response(response: 200, description: 'Receta encontrada')]
+    #[OA\Response(response: 404, description: 'No encontrada')]
     public function show(Recipe $recipe)
     {
         return $recipe->load('user', 'ingredients','steps');
@@ -71,6 +85,10 @@ class RecipesController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    #[OA\Put(path: '/api/recipes/{id}', summary: 'Actualizar una receta', tags: ['Recetas'], security: [['bearerAuth' => []]])]
+    #[OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))]
+    #[OA\Response(response: 200, description: 'Receta actualizada')]
+    #[OA\Response(response: 403, description: 'No autorizado')]
     public function update(Request $request, Recipe $recipe)
     {
         if ($recipe->user_id !== Auth::id() && Auth::user()->role !== 'admin'){
@@ -119,6 +137,10 @@ class RecipesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    #[OA\Delete(path: '/api/recipes/{id}', summary: 'Borrar una receta', tags: ['Recetas'], security: [['bearerAuth' => []]])]
+    #[OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))]
+    #[OA\Response(response: 200, description: 'Receta eliminada')]
+    #[OA\Response(response: 403, description: 'No autorizado')]
     public function destroy(Recipe $recipe)
     { 
         if ($recipe->user_id !== Auth::id() && Auth::user()->role !== 'admin'){

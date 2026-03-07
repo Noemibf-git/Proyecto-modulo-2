@@ -7,10 +7,19 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use OpenApi\Attributes as OA;
+
 
 
 class AuthController extends Controller
 {
+    #[OA\Post(path: '/api/login', summary: 'Iniciar sesión', tags: ['Autenticación'])]
+    #[OA\RequestBody(required: true, content: new OA\JsonContent(properties: [
+        new OA\Property(property: 'email', type: 'string', example: 'admin@example.com'),
+        new OA\Property(property: 'password', type: 'string', example: 'password'),
+    ]))]
+    #[OA\Response(response: 200, description: 'Login correcto')]
+    #[OA\Response(response: 401, description: 'Credenciales incorrectas')]
     public function login(Request $request)
     {
 
@@ -46,7 +55,14 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
-
+    #[OA\Post(path: '/api/register', summary: 'Registrar usuario', tags: ['Autenticación'])]
+    #[OA\RequestBody(required: true, content: new OA\JsonContent(properties: [
+        new OA\Property(property: 'username', type: 'string', example: 'Maria'),
+        new OA\Property(property: 'email', type: 'string', example: 'maria@ejemplo.com'),
+        new OA\Property(property: 'password', type: 'string', example: 'contraseña123'),
+        new OA\Property(property: 'password_confirmation', type: 'string', example: 'contraseña123'),
+    ]))]
+    #[OA\Response(response: 201, description: 'Usuario registrado')]
     public function register(Request $request)
 {
     $data = $request->validate([
